@@ -1,0 +1,28 @@
+Task List
+1. Show available moves to players
+  - Create map/array of all vertices, store in gameboard class.
+    - Create Vertex class
+      - Location
+      - Owner (Player)
+      - structureType, options of null, settlement or city.
+      - function highlight(){
+        highlight/animate vertex for selection
+      }
+      - function render(){
+        redraws the structureType in the appropriate color if settled.
+      }
+    - Add vertices property to HexTile class
+      - Array of the hexTiles vertexs.  Can then find who resources go to when number is rolled.
+        - Will also need to be able to check if vertices are adjacent.  Can only build settlement two vertexes away from one another.
+  - Loop through vertices and render highlight/animation
+2. Harbors
+  - Attach harbors to vertices? How do we want to handle this.
+3. Create GamePiece class
+  - All other game piece classes extend this one.
+  - render function
+4.
+5.
+6.
+7.
+8.
+9.
