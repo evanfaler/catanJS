@@ -5,6 +5,8 @@ class GamePiece {
     this.img = img;
   }
 
+  //resolve and index are optional.  Used for initial draw of hex tiles and num
+  //tiles.
   render(ctx, scale, resolve, index) {
     if (this.img != null){
       var xyLoc = this.locXY()
@@ -16,15 +18,28 @@ class GamePiece {
       const anchor = this.imgAnchorPoint(scale);
       const imgSize = this.imgDims(scale);
 
-      this.img.onload = function() {
-        ctx.drawImage(this, xyLoc.x - anchor.x, xyLoc.y - anchor.y, imgSize.x, imgSize.y)
+      //Check if image is loaded.  If it is, go ahead and draw it.
+      //If not, add listener for load and draw after.
+      //For initial draw of hex and number tiles, a promise is used
+      //to ensure that the hex tiles are drawn before the num tiles.
+      //resolve function is called once hex tile is loaded and drawn.
+      var isLoaded = this.img.complete && this.img.naturalHeight !== 0;
+      if(isLoaded){
+        ctx.drawImage(this.img, xyLoc.x - anchor.x, xyLoc.y - anchor.y, imgSize.x, imgSize.y)
+      } else {
+        this.img.onload = function() {
+          ctx.drawImage(this, xyLoc.x - anchor.x, xyLoc.y - anchor.y, imgSize.x, imgSize.y)
 
-        if(typeof resolve !== 'undefined') {
-          setTimeout(function() {
-            console.log("Current Index: " + index)
-            resolve(index) }, 100);
+          if(typeof resolve !== 'undefined') {
+            setTimeout(function() {
+              resolve(index)
+            }, 0);
+          }
         }
       }
+
+
+
     }
 
   }

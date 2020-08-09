@@ -104,22 +104,17 @@ class GameBoard {
 
   render() {
 		const hexSize = this.getHexSize()
-
-  	//Loop through hexs and render
+  	//Loop through hexs and render.  Promise used to ensure hex tiles are drawn
+		//first, followed by number tiles on top.
   	const hexLength = this.hexTiles.length
   	for (var i = 0; i < hexLength; i++) {
-			//Turn this into a promise to ensure number tiles are draw after.
-
 			var promise = new Promise((resolve, reject) => {
 				this.hexTiles[i].render(this.ctx, hexSize, resolve, i)
-			}).then((val) => {
-				console.log(this.hexTiles[val].numberTile)
+			})
+			promise.then((val) => {
 				this.hexTiles[val].numberTile.render(this.ctx, hexSize)
 			})
-
-
   	}
-
   }
 
 	getCanvasOrigin(){
