@@ -6,7 +6,6 @@ class Vertex extends GamePiece{
     this.structureType = null; //Options of null, settlement or city
   }
 
-//TODO: update imgDims function
   imgDims(scale) {
     var hFactor
     var wFactor
@@ -65,7 +64,7 @@ class Vertex extends GamePiece{
   //   }
   // }
 
-  highlight(){
+  highlight(){ //Function to highlight available
 
   }
 

@@ -17,45 +17,40 @@ var boardRadius = 2
 gb = new GameBoard(boardRadius)
 gb.render()
 
-//Testing out vertexes
-// var v = new Vertex(0, 0)
-// const img = new Image()
-// img.src = "img/structures/city_4.png"
-// v.structureType = "city"
-// v.img = img
-//
-// v.render(gb.ctx, gb.getHexSize())
 
+//CONTROL PANEL SETUP
+//Regenerate hex map button and reroll numbers
 var rgnBtn = document.getElementById("rgnBtn");
 rgnBtn.addEventListener("click", (event) => {
   gb = new GameBoard(2)
   gb.render()
 })
 
+//Gamepiece selection tray
+var ctrlPanel = document.getElementById("ctrlPanel");
 
-//get cursor location when over canvas.
-gb.canvas.addEventListener("mousedown", (event) => {
-	const rect = gb.canvas.getBoundingClientRect();
-	var p = new Point(event.clientX - rect.left, event.clientY - rect.top)
+console.log("Control Panel Width = " + ctrlPanel.offsetWidth)
 
-  //Convert clicked coords to q and r coords
-  const canvasOrigin = new Point(gb.canvas.width / 4, gb.canvas.height / 4);
-  p.x = p.x - canvasOrigin.x
-  p.y = p.y - canvasOrigin.y
-  p.scale(2 / gb.getHexSize())
-  p = convertXYtoQR(p)
+const pieceArr = ["settlement", "city"]
 
-  var v = new Vertex(p.x, p.y)
-  const img = new Image()
-  img.src = "img/structures/settlement_4.png"
-  v.structureType = "settlement"
-  v.img = img
+for (var i = 1; i <= 4; i++) { //loop through each player
+  const div = document.createElement('div');
+  div.id = "pieceContainer_" + i;
+  div.className = "pieceContainer"
 
-  v.render(gb.ctx, gb.getHexSize())
-})
+  for (var j = 0; j < pieceArr.length; j++) { //loop through each game piece
+    const img = document.createElement("img");
+    img.src = "img/structures/" + pieceArr[j] + "_" + i + ".png"
+    img.id = pieceArr[j] + "_" + i
+    //TODO: make image size more dynamic for control panel
+    img.height = "100"
+    img.width = "100"
+    div.appendChild(img)
 
-function convertXYtoQR(p){
-  const r = (2 / 3) * p.y
-  const q = (p.x / Math.sqrt(3)) - r / 2
-  return new Point(q, r)
+    img.addEventListener('click', (e) => {
+      gb.awaitPlacement(img.id);
+    });
+  }
+
+  ctrlPanel.appendChild(div)
 }

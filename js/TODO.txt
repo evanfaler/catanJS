@@ -26,3 +26,7 @@ Task List
 5. Robber gamepiece design
 
 6.  Resource management
+
+7.  Road graphics
+
+8.  Undo/Redo draw function

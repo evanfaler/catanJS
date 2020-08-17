@@ -27,7 +27,18 @@ body {
 .controlPanel {
 	height: 100%;
 	flex-basis: 300px;
-	background-color: #C1C2C2;
+	background-color: rgba(89, 191, 255, 0.6);
 	text-align: center;
+	display: flex;
+	flex-direction: column;
+}
 
+.pieceContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.pieceContainer img {
+	object-fit: contain;
 }
