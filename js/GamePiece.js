@@ -26,6 +26,11 @@ class GamePiece {
       var isLoaded = this.img.complete && this.img.naturalHeight !== 0;
       if(isLoaded){
         ctx.drawImage(this.img, xyLoc.x - anchor.x, xyLoc.y - anchor.y, imgSize.x, imgSize.y)
+        if(typeof resolve !== 'undefined') {
+          setTimeout(function() {
+            resolve(index)
+          }, 0);
+        }
       } else {
         this.img.onload = function() {
           ctx.drawImage(this, xyLoc.x - anchor.x, xyLoc.y - anchor.y, imgSize.x, imgSize.y)
@@ -37,11 +42,7 @@ class GamePiece {
           }
         }
       }
-
-
-
     }
-
   }
 
   imgDims(scale) {

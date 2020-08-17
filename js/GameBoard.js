@@ -22,9 +22,9 @@ class GameBoard {
 	}
 
 	setupCanvas(){
-		//Make canvas fill browser window
-		const w = window.innerWidth;
-  	const h = window.innerHeight;
+		//Make canvas fill container
+		const w = document.getElementById('canvasContainer').clientWidth;
+  	const h = document.getElementById('canvasContainer').clientHeight;
   	// this.canvas.width = w;
   	this.canvas.style.width = parseInt(w) + "px"
   	// this.canvas.height = h;
@@ -44,7 +44,7 @@ class GameBoard {
   	//fill canvas with solid color for background color
   	this.ctx.beginPath();
     this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillStyle = "#56A3A6";
+    this.ctx.fillStyle = "#59bfff";
     this.ctx.fill();
 	}
 

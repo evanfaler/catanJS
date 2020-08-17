@@ -1,33 +1,69 @@
-class Vertex {
+class Vertex extends GamePiece{
   constructor(q, r){
-    this.q = q;  //rotated 60deg axis
-    this.r = r;  //vertical axis
+    const img = new Image() //starts out as empty image.
+    super(q, r, img)
     this.owner = null;
     this.structureType = null; //Options of null, settlement or city
   }
 
-  render(ctx, size){
-    if(this.structureType != null){
-      //render structure of apropriate color
-      const img = new Image();
-      img.src = "img/structures/" + this.structureType + "_" + this.owner + ".png"
-
-      //scale img to match resource aspect ratio
-      const h = 0.25 * size;
-      var w
-      if(this.structureType == "settlement"){
-        w = 1.5 * h;
-      } else {
-        w = 2 * h;
-      }
-
-      img.onload = function() {
-        ctx.drawImage(img, 750, 750, w, h)
-      }
-    } else {
-      console.log("No structure on vertex. Nothing to render!")
+//TODO: update imgDims function
+  imgDims(scale) {
+    var hFactor
+    var wFactor
+    if(this.structureType == "settlement"){
+      hFactor = 0.268
+      wFactor = 1.472
+    } else if (this.structureType == "city") {
+      hFactor = 0.346
+      wFactor = 1.528
+    } else {//default to square aspect ratio
+      hFactor = 0.4
+      wFactor = 1.0
     }
-  }
+
+    const h = hFactor * scale
+    const dims = new Point(wFactor * h, h)
+
+		return dims
+	}
+
+  imgAnchorPoint(scale){
+    const dims = this.imgDims(scale)
+    var p
+    if(this.structureType == "settlement"){
+      p = new Point(0.607 * dims.x, 0.419 * dims.y)
+    } else if (this.structureType == "city") {
+      //TODO: Add city anchor point calc
+      p = new Point(0.573 * dims.x, 0.326 * dims.y)
+    } else { //default to centered anchor
+      p = new Point(0.5 * dims.x, 0.5 * dims.y)
+    }
+
+    return p
+	}
+
+  // render(ctx, size){
+  //   if(this.structureType != null){
+  //     //render structure of apropriate color
+  //     const img = new Image();
+  //     img.src = "img/structures/" + this.structureType + "_" + this.owner + ".png"
+  //
+  //     //scale img to match resource aspect ratio
+  //     const h = 0.25 * size;
+  //     var w
+  //     if(this.structureType == "settlement"){
+  //       w = 1.5 * h;
+  //     } else {
+  //       w = 2 * h;
+  //     }
+  //
+  //     img.onload = function() {
+  //       ctx.drawImage(img, 750, 750, w, h)
+  //     }
+  //   } else {
+  //     console.log("No structure on vertex. Nothing to render!")
+  //   }
+  // }
 
   highlight(){
 

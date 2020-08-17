@@ -5,11 +5,23 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<canvas width="200" height="200" id="gameCanvas"></canvas>
+	<div class="wrapper">
+		<div class="gameContainer">
+			<div id="canvasContainer" class="canvasContainer">
+				<canvas id="gameCanvas"></canvas>
+			</div>
+			<div class="controlPanel">
+				<h3>Control Panel</h3>
+				<button id="rgnBtn" type="button" name="button">Regenerate Tiles</button>
+			</div>
+		</div>
+
+	</div>
+
 </body>
 <script type="text/javascript" src="js/Point.js"></script>
-<script type="text/javascript" src="js/Vertex.js"></script>
 <script type="text/javascript" src="js/GamePiece.js"></script>
+<script type="text/javascript" src="js/Vertex.js"></script>
 <script type="text/javascript" src="js/NumberTile.js"></script>
 <script type="text/javascript" src="js/HexTile.js"></script>
 <script type="text/javascript" src="js/GameBoard.js"></script>
