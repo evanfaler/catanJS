@@ -15,7 +15,14 @@ Task List
       - Array of the hexTiles vertexs.  Can then find who resources go to when number is rolled.
         - Will also need to be able to check if vertices are adjacent.  Can only build settlement two vertexes away from one another.
   - Loop through vertices and render highlight/animation
+
 2. Harbors
   - Attach harbors to vertices? How do we want to handle this.
 
-3. 
+3. Dice roll animation/roller whatever
+
+4. Control panel options for placing pieces.
+
+5. Robber gamepiece design
+
+6.  Resource management
