@@ -7,7 +7,10 @@ class GameBoard {
 		this.ctx = this.canvas.getContext("2d");
 		this.dpr = window.devicePixelRatio || 1;
 		this.awaitingPlacement = false;
+		this.currentPiece = null;
+		this.imgID = ""
 		this.init()
+		this.placedPieces = []
 	}
 
 	init() {
@@ -135,27 +138,37 @@ class GameBoard {
 	}
 
 	awaitPlacement(imgID){
+		//Add imgID variable to canvas
+		//becomes accessible in _placePiece through this keyword
+		this.canvas.imgID = imgID
 		//Add listener to canvas for object placement
-		this.canvas.addEventListener("mousedown", placePiece)
-
-		function placePiece(event) {
-
-			const p = gb._getEventLocOnCanvas(event)
-
-			var v = new Vertex(p.x, p.y)
-			const img = new Image()
-			img.src = "img/structures/" + imgID + ".png"
-			v.structureType = imgID.substring(0, imgID.length - 2)
-			v.img = img
-
-			v.render(gb.ctx, gb.getHexSize())
-
-			//keyword "this" is gb.canvas here.
-			this.removeEventListener("mousedown", placePiece)
+		if(this.awaitingPlacement){
+			console.log("already awaiting placement...")
+			this.canvas.removeEventListener("click", this._placePiece)
+			this.canvas.addEventListener("click", this._placePiece)
+		} else {
+			this.canvas.addEventListener("click", this._placePiece)
+			this.awaitingPlacement = true;
 		}
+	}
 
-		//Create new vertex Object
-		//Remove listener once placed.
+	_placePiece(event) {
+		const p = gb._getEventLocOnCanvas(event)
+
+		var v = new Vertex(p.x, p.y)
+		const img = new Image()
+		img.src = "img/structures/" + this.imgID + ".png"
+		v.owner = this.imgID.charAt(this.imgID.length - 1)
+		v.structureType = this.imgID.substring(0, this.imgID.length - 2)
+		v.img = img
+
+		gb.placedPieces.push(v)
+
+		v.render(gb.ctx, gb.getHexSize())
+
+		//keyword "this" is gb.canvas here.
+		this.removeEventListener("click", gb._placePiece)
+		gb.awaitingPlacement = false;
 	}
 
 
