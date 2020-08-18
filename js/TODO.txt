@@ -1,5 +1,5 @@
 Task List
-1. Show available moves to players
+1.  Show available moves to players
   - Create map/array of all vertices, store in gameboard class.
     - Create Vertex class
       - Location
@@ -16,17 +16,27 @@ Task List
         - Will also need to be able to check if vertices are adjacent.  Can only build settlement two vertexes away from one another.
   - Loop through vertices and render highlight/animation
 
-2. Harbors
+2.  Harbors
   - Attach harbors to vertices? How do we want to handle this.
 
-3. Dice roll animation/roller whatever
+3.  Dice roll animation/roller whatever
 
-4. Control panel options for placing pieces.
+4.  Control panel options for placing pieces.
 
-5. Robber gamepiece design
+5.  Robber gamepiece design
 
-6.  Resource management
+6.  Robber placement mechanics
 
-7.  Road graphics
+7.  Resource management
 
-8.  Undo/Redo draw function
+8.  Road graphics
+
+9.  Undo/Redo piece placement
+
+10.  Finish adding levels of rendering to gameboard class.  Refer to notes in js file.
+
+11. Fix layout issues
+
+12. Update layout when window size changes
+
+13. Add sudo random gameboard generation

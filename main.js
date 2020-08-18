@@ -10,16 +10,13 @@ Array.prototype.shuffle = function() {
   }
 }
 
-
 //Hexagon logic
 //https://www.redblobgames.com/grids/hexagons/
 var boardRadius = 2
 gb = new GameBoard(boardRadius)
-gb.render()
+gb.render(2)
 
 setupControlPanel()
-
-
 
 //CONTROL PANEL SETUP
 function setupControlPanel(){
@@ -27,7 +24,7 @@ function setupControlPanel(){
   var rgnBtn = document.getElementById("rgnBtn");
   rgnBtn.addEventListener("click", (event) => {
     gb = new GameBoard(2)
-    gb.render()
+    gb.render(2)
   })
 
   //Gamepiece selection tray

@@ -8,9 +8,10 @@ class GameBoard {
 		this.dpr = window.devicePixelRatio || 1;
 		this.awaitingPlacement = false;
 		this.currentPiece = null;
-		this.imgID = ""
+		this.imgID = null;
+		this.hexTiles = [];
 		this.init()
-		this.placedPieces = []
+		this.placedPieces = [];
 	}
 
 	init() {
@@ -54,8 +55,6 @@ class GameBoard {
 
 	//Creates hexes
 	generateHexTiles() {
-		this.hexTiles = []
-
 		//resources and ratings arrays
 		//values are quantity of items remaining.
 		var resources = this._generateResources();
@@ -106,19 +105,31 @@ class GameBoard {
 		}
 	}
 
-	render() {
+	//Renders gameboard at various levels
+	//1: Hexes only
+	//2: + numberTiles
+	//3: + placed game pieces
+	//4: placed game pieces only
+	//5: Hexes and game pieces
+	render(level) {
 		const hexSize = this.getHexSize()
 		//Loop through hexs and render.  Promise used to ensure hex tiles are drawn
 		//first, followed by number tiles on top.
-		const hexLength = this.hexTiles.length
-		for (var i = 0; i < hexLength; i++) {
-			var promise = new Promise((resolve, reject) => {
-				this.hexTiles[i].render(this.ctx, hexSize, resolve, i)
-			})
-			promise.then((val) => {
-				this.hexTiles[val].numberTile.render(this.ctx, hexSize)
-			})
+		if(level <= 3){
+			const hexLength = this.hexTiles.length
+			for (var i = 0; i < hexLength; i++) {
+				var hexPromise = new Promise((resolve, reject) => {
+					this.hexTiles[i].render(this.ctx, hexSize, resolve, i)
+				})
+
+				if(level >= 2){
+					hexPromise.then((val) => {
+						this.hexTiles[val].numberTile.render(this.ctx, hexSize)
+					})
+				}
+			}
 		}
+
 	}
 
 	getCanvasOrigin(){
@@ -138,18 +149,21 @@ class GameBoard {
 	}
 
 	awaitPlacement(imgID){
-		//Add imgID variable to canvas
-		//becomes accessible in _placePiece through this keyword
+		//Add imgID variable to canvas which then
+		//becomes accessible in _placePiece through "this" keyword
 		this.canvas.imgID = imgID
 		//Add listener to canvas for object placement
 		if(this.awaitingPlacement){
-			console.log("already awaiting placement...")
 			this.canvas.removeEventListener("click", this._placePiece)
 			this.canvas.addEventListener("click", this._placePiece)
 		} else {
 			this.canvas.addEventListener("click", this._placePiece)
 			this.awaitingPlacement = true;
 		}
+	}
+
+	undoLastMove(){
+
 	}
 
 	_placePiece(event) {
@@ -170,7 +184,6 @@ class GameBoard {
 		this.removeEventListener("click", gb._placePiece)
 		gb.awaitingPlacement = false;
 	}
-
 
 	_generateResources() {
 		var resources = []
