@@ -22,21 +22,28 @@ Task List
 3.  Dice roll animation/roller whatever
 
 4.  Control panel options for placing pieces.
+4a. Houses
+4b. Cities
+4c. Roads
+4d. Robber
 
 5.  Robber gamepiece design
 
 6.  Robber placement mechanics
 
-7.  Resource management
+7.  Resource management (Resource cards)
 
 8.  Road graphics
 
 9.  Undo/Redo piece placement
 
 10.  Finish adding levels of rendering to gameboard class.  Refer to notes in js file.
+10.a Add multiple canvas layers for easier UI rendering
 
 11. Fix layout issues
 
 12. Update layout when window size changes
 
 13. Add sudo random gameboard generation
+
+14. show selected gamePiece below cursor before placing.  Remove once placed.

@@ -3,8 +3,12 @@
 class GameBoard {
 	constructor(radius){
 		this.radius = radius
-		this.canvas = document.getElementById("gameCanvas");
-		this.ctx = this.canvas.getContext("2d");
+		this.hexCanvas = document.getElementById("hexCanvas");
+		this.gamePieceCanvas = document.getElementById("gamePieceCanvas");
+		this.UICanvas = document.getElementById("UICanvas");
+		this.hexCtx = this.hexCanvas.getContext('2d', { alpha: false });
+		this.gamePieceCtx = this.gamePieceCanvas.getContext('2d', { alpha: false });
+		this.UICtx = this.UICanvas.getContext('2d', { alpha: false });
 		this.dpr = window.devicePixelRatio || 1;
 		this.awaitingPlacement = false;
 		this.currentPiece = null;
@@ -12,45 +16,37 @@ class GameBoard {
 		this.hexTiles = [];
 		this.init()
 		this.placedPieces = [];
+
 	}
 
 	init() {
-		this.setupCanvas()
+		this.setupCanvases()
 		this.generateHexTiles()
 
-		//get cursor location when over canvas.
-		// this.canvas.addEventListener("mousemove", (event) => {
-		// 	const rect = this.canvas.getBoundingClientRect();
-		// 	const p = new Point(event.clientX - rect.left, event.clientY - rect.top)
-		// 	console.log("Cursor Coords: (" + p.x + ", " + p.y + ")")
-		// })
+
 	}
 
-	setupCanvas(){
+	setupCanvases(){
 		//Make canvas fill container
 		const w = document.getElementById('canvasContainer').clientWidth;
 		const h = document.getElementById('canvasContainer').clientHeight;
-		// this.canvas.width = w;
-		this.canvas.style.width = parseInt(w) + "px"
-		// this.canvas.height = h;
-		this.canvas.style.height = parseInt(h) + "px"
-
-		// Get the size of the canvas in CSS pixels.
-		const rect = this.canvas.getBoundingClientRect();
-		// Give the canvas pixel dimensions of their CSS
-		// size * the device pixel ratio.
-		this.canvas.width = rect.width * this.dpr;
-		this.canvas.height = rect.height * this.dpr;
-		var ctx = this.canvas.getContext('2d');
-		// Scale all drawing operations by the dpr, so you
-		// don't have to worry about the difference.
-		//this.ctx.scale(this.dpr, this.dpr);
+		const canvases = [this.hexCanvas, this.gamePieceCanvas, this.UICanvas];
+		canvases.forEach((c) => {
+			c.style.width = parseInt(w) + "px"
+			c.style.height = parseInt(h) + "px"
+			// Get the size of the canvas in CSS pixels.
+			const rect = c.getBoundingClientRect();
+			// Give the canvas pixel dimensions of their CSS
+			// size * the device pixel ratio.
+			c.width = rect.width * this.dpr;
+			c.height = rect.height * this.dpr;
+		});
 
 		//fill canvas with solid color for background color
-		this.ctx.beginPath();
-		this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
-		this.ctx.fillStyle = "#59bfff";
-		this.ctx.fill();
+		this.hexCtx.beginPath();
+		this.hexCtx.rect(0, 0, this.hexCanvas.width, this.hexCanvas.height);
+		this.hexCtx.fillStyle = "#59bfff";
+		this.hexCtx.fill();
 	}
 
 	//Creates hexes
@@ -106,25 +102,23 @@ class GameBoard {
 	}
 
 	//Renders gameboard at various levels
-	//1: Hexes only
-	//2: + numberTiles
-	//3: + placed game pieces
-	//4: placed game pieces only
-	//5: Hexes and game pieces
+	//1: Hexes + NumberTiles
+	//2: + placed game pieces
+	//3: placed game pieces only
 	render(level) {
 		const hexSize = this.getHexSize()
 		//Loop through hexs and render.  Promise used to ensure hex tiles are drawn
 		//first, followed by number tiles on top.
-		if(level <= 3){
+		if(level < 3){
 			const hexLength = this.hexTiles.length
 			for (var i = 0; i < hexLength; i++) {
 				var hexPromise = new Promise((resolve, reject) => {
-					this.hexTiles[i].render(this.ctx, hexSize, resolve, i)
+					this.hexTiles[i].render(this.hexCtx, hexSize, resolve, i)
 				})
 
 				if(level >= 2){
 					hexPromise.then((val) => {
-						this.hexTiles[val].numberTile.render(this.ctx, hexSize)
+						this.hexTiles[val].numberTile.render(this.hexCtx, hexSize)
 					})
 				}
 			}
@@ -132,16 +126,16 @@ class GameBoard {
 
 	}
 
-	getCanvasOrigin(){
-		var w = this.canvas.width
-		var h = this.canvas.height
+	getCanvasOrigin(canvas){
+		var w = canvas.width
+		var h = canvas.height
 		return new Point(w/2, h/2) //divide by 2 because canvas was scaled up x2 for less blur
 	}
 
 	getHexSize(){
-		var canvasMargin = this.canvas.height * 0.05
+		var canvasMargin = this.hexCanvas.height * 0.05
 		var hexRows = 2 * this.radius + 1
-		var boardHeight = this.canvas.height - (2 * canvasMargin)
+		var boardHeight = this.hexCanvas.height - (2 * canvasMargin)
 		//(rows - 0.5)*(3/4*hexHeight)+hexHeight = boardHeight...solve for hexHeight
 		var hexHeight = (8 * boardHeight) / (6 * hexRows + 5)
 		var hexSize = hexHeight / 2
@@ -151,13 +145,14 @@ class GameBoard {
 	awaitPlacement(imgID){
 		//Add imgID variable to canvas which then
 		//becomes accessible in _placePiece through "this" keyword
-		this.canvas.imgID = imgID
+		this.gamePieceCanvas.imgID = imgID
+		console.log("Called awaitPlacement...")
 		//Add listener to canvas for object placement
 		if(this.awaitingPlacement){
-			this.canvas.removeEventListener("click", this._placePiece)
-			this.canvas.addEventListener("click", this._placePiece)
+			this.gamePieceCanvas.removeEventListener("click", this._placePiece)
+			this.gamePieceCanvas.addEventListener("click", this._placePiece)
 		} else {
-			this.canvas.addEventListener("click", this._placePiece)
+			this.gamePieceCanvas.addEventListener("click", this._placePiece)
 			this.awaitingPlacement = true;
 		}
 	}
@@ -168,6 +163,7 @@ class GameBoard {
 
 	_placePiece(event) {
 		const p = gb._getEventLocOnCanvas(event)
+		console.log(p)
 
 		var v = new Vertex(p.x, p.y)
 		const img = new Image()
@@ -178,7 +174,7 @@ class GameBoard {
 
 		gb.placedPieces.push(v)
 
-		v.render(gb.ctx, gb.getHexSize())
+		v.render(gb.gamePieceCtx, gb.getHexSize())
 
 		//keyword "this" is gb.canvas here.
 		this.removeEventListener("click", gb._placePiece)
@@ -237,11 +233,11 @@ class GameBoard {
 	}
 
 	_getEventLocOnCanvas(event){
-		const rect = this.canvas.getBoundingClientRect();
-		var p = new Point(event.clientX - rect.left, event.clientY - rect.top)
+		const canv = event.target
+		var p = new Point(event.clientX, event.clientY)
 
 		//Convert clicked coords to q and r coords
-		const canvasOrigin = new Point(this.canvas.width / 4, this.canvas.height / 4);
+		const canvasOrigin = new Point(canv.width / 4, canv.height / 4);
 		p.x = p.x - canvasOrigin.x
 		p.y = p.y - canvasOrigin.y
 		p.scale(2 / this.getHexSize())

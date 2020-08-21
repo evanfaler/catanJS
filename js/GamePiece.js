@@ -11,12 +11,17 @@ class GamePiece {
     if (this.img != null){
       var xyLoc = this.locXY()
       xyLoc.scale(scale)
-      const canvasOrigin = new Point(ctx.canvas.width / 2, ctx.canvas.height / 2);
+      const canvasOrigin = new Point(ctx.canvas.width / gb.dpr, ctx.canvas.height / gb.dpr);
       xyLoc.x = canvasOrigin.x + xyLoc.x
     	xyLoc.y = canvasOrigin.y + xyLoc.y
 
       const anchor = this.imgAnchorPoint(scale);
       const imgSize = this.imgDims(scale);
+
+      const xLoc = Math.floor(xyLoc.x - anchor.x)
+      const yLoc = Math.floor(xyLoc.y - anchor.y)
+      const xDim = Math.floor(imgSize.x)
+      const yDim = Math.floor(imgSize.y)
 
       //Check if image is loaded.  If it is, go ahead and draw it.
       //If not, add listener for load and draw after.
@@ -25,21 +30,20 @@ class GamePiece {
       //resolve function is called once hex tile is loaded and drawn.
       var isLoaded = this.img.complete && this.img.naturalHeight !== 0;
       if(isLoaded){
-        ctx.drawImage(this.img, xyLoc.x - anchor.x, xyLoc.y - anchor.y, imgSize.x, imgSize.y)
+        draw.call(this)
+      } else {
+        this.img.addEventListener("load", draw);
+      }
+
+      function draw(){
+        const img = (this instanceof HTMLImageElement) ? this : this.img;
+
+        ctx.drawImage(img, xLoc, yLoc, xDim, yDim)
+
         if(typeof resolve !== 'undefined') {
           setTimeout(function() {
             resolve(index)
           }, 0);
-        }
-      } else {
-        this.img.onload = function() {
-          ctx.drawImage(this, xyLoc.x - anchor.x, xyLoc.y - anchor.y, imgSize.x, imgSize.y)
-
-          if(typeof resolve !== 'undefined') {
-            setTimeout(function() {
-              resolve(index)
-            }, 0);
-          }
         }
       }
     }

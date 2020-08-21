@@ -24,6 +24,10 @@ body {
 	flex: 1;
 }
 
+.canvasContainer canvas {
+	position: absolute;
+}
+
 .controlPanel {
 	height: 100%;
 	flex-basis: 300px;
