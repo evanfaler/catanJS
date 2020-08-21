@@ -25,7 +25,7 @@ class GamePiece {
 
       //Check if image is loaded.  If it is, go ahead and draw it.
       //If not, add listener for load and draw after.
-      //For initial draw of hex and number tiles, a promise is used
+      //For render levels 1 and 2, a promise is used
       //to ensure that the hex tiles are drawn before the num tiles.
       //resolve function is called once hex tile is loaded and drawn.
       var isLoaded = this.img.complete && this.img.naturalHeight !== 0;
