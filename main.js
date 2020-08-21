@@ -27,6 +27,16 @@ function setupControlPanel(){
     gb.render(2)
   })
 
+  //Undo/Redo buttons
+  var undoBtn = document.getElementById("undoBtn")
+  undoBtn.addEventListener("click", (event) => {
+    gb.undoLastMove();
+  })
+  var redoBtn = document.getElementById("redoBtn")
+  redoBtn.addEventListener("click", (event) => {
+    gb.redoLastMove();
+  })
+
   //Gamepiece selection tray
   var ctrlPanel = document.getElementById("ctrlPanel");
 

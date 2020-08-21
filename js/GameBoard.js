@@ -16,6 +16,7 @@ class GameBoard {
 		this.hexTiles = [];
 		this.init()
 		this.placedPieces = [];
+		this.undonePieces = [];
 
 	}
 
@@ -122,6 +123,12 @@ class GameBoard {
 					})
 				}
 			}
+		} else if (level == 3){
+			this.gamePieceCtx.clearRect(0, 0, this.gamePieceCanvas.width, this.gamePieceCanvas.height);
+			this.placedPieces.forEach((piece) => {
+				piece.render(this.gamePieceCtx, hexSize);
+			});
+
 		}
 
 	}
@@ -158,9 +165,20 @@ class GameBoard {
 	}
 
 	undoLastMove(){
-
+		if(this.placedPieces.length > 0){
+			this.undonePieces.push(this.placedPieces.pop())
+			this.render(3);
+		}
 	}
 
+	redoLastMove(){
+		if(this.undonePieces.length > 0){
+			this.placedPieces.push(this.undonePieces.pop())
+			this.render(3);
+		}
+	}
+
+	//Render current gamePiece at click event coordinates.
 	_placePiece(event) {
 		const p = gb._getEventLocOnCanvas(event)
 		console.log(p)
@@ -173,6 +191,7 @@ class GameBoard {
 		v.img = img
 
 		gb.placedPieces.push(v)
+		gb.undonePieces = []
 
 		v.render(gb.gamePieceCtx, gb.getHexSize())
 

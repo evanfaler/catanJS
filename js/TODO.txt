@@ -35,10 +35,10 @@ Task List
 
 8.  Road graphics
 
-9.  Undo/Redo piece placement
+DONE__9.  Undo/Redo piece placement
 
-10.  Finish adding levels of rendering to gameboard class.  Refer to notes in js file.
-10.a Add multiple canvas layers for easier UI rendering
+DONE__10.  Finish adding levels of rendering to gameboard class.  Refer to notes in js file.
+DONE__10.a Add multiple canvas layers for easier UI rendering
 
 11. Fix layout issues
 

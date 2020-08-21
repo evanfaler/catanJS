@@ -4,6 +4,19 @@ body {
 	height: 100vh;
 }
 
+.flex {
+	display: flex;
+	justify-content: center;
+}
+
+.row {
+	flex-direction: row;
+}
+
+.col {
+	flex-direction: col;
+}
+
 .wrapper {
 	height: 100%;
   min-height: 100%;
@@ -26,6 +39,8 @@ body {
 
 .canvasContainer canvas {
 	position: absolute;
+	cursor: url("img/structures/settlement_1.png"), pointer;
+	/* cursor: url('http://www.gravatar.com/avatar/06ededb95f1c0b1f4f9d987e06d7d82b?s=32&d=identicon&r=PG'), pointer;   */
 }
 
 .controlPanel {
